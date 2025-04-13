@@ -1,4 +1,6 @@
 const express = require('express');
+
+import loginRoutes from './routes/loginRoutes.js';
 //const bodyParser = require('body-parser');
 
 const app = express();
@@ -6,6 +8,12 @@ const PORT = 3000;
 
 // Middleware
 //app.use(bodyParser.json());
+
+
+
+app.use("login", loginRoutes);
+
+
 
 // Routes
 app.get('/', (req, res) => {
