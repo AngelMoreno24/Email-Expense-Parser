@@ -1,0 +1,40 @@
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center; /* Center content vertically */
+    align-items: center;    /* Center content horizontally */
+    background: #353535;    /* Optional: Add a background color */
+  }
+  
+  .layout-content {
+    width:  90%;        /* Set a max width for the content */
+    padding: 20px;
+    background: #1f1f1f;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;      /* Add rounded corners */
+    text-align: center;      /* Center text within the content */
+    min-height: 700px;
+    color: white;
+  }
+  
+  .layout-footer {
+    margin-top: 20px;        /* Add some spacing from the content */
+    text-align: center;
+    color: gray;
+  }
+  .layout-navbar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #353535;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
