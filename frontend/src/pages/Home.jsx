@@ -1,11 +1,12 @@
+// src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // ⬅️ Import navigate
 import './cssPages/Home.css';
-import ConnectGmailButton from '../components/ConnectGmailButton';
 
 const Home = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate(); // ⬅️ Init navigate
 
   const fetchExpenses = () => {
     setLoading(true);
@@ -13,11 +14,15 @@ const Home = () => {
       credentials: 'include'
     })
       .then(res => {
+        if (res.status === 401) {
+          navigate('/'); // ⬅️ Redirect to login page
+          return;
+        }
         if (!res.ok) throw new Error("Failed to fetch expenses");
         return res.json();
       })
       .then(data => {
-        setExpenses(data);
+        if (data) setExpenses(data);
         setLoading(false);
       })
       .catch(err => {
@@ -27,30 +32,8 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user', {
-      credentials: 'include'
-    })
-      .then(res => {
-        if (!res.ok) throw new Error("Not logged in");
-        return res.json();
-      })
-      .then(() => {
-        setLoggedIn(true);
-        fetchExpenses();
-      })
-      .catch(() => {
-        setLoggedIn(false);
-      });
+    fetchExpenses();
   }, []);
-
-  if (!loggedIn) {
-    return (
-      <div>
-        <h2>Please connect your Gmail to continue</h2>
-        <ConnectGmailButton />
-      </div>
-    );
-  }
 
   return (
     <div>

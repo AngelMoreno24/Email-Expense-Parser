@@ -87,7 +87,14 @@ function extractAmount(text) {
 app.get('/', (req, res) => {
   res.send('Welcome to the Email Expense Parser Backend!');
 });
-
+app.post('/logout', (req, res) => {
+  req.logout(() => {
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid'); // Optional: manually clear cookie
+      res.sendStatus(200);
+    });
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

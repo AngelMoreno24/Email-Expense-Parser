@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import NoPage from './pages/NoPage';
 import Login from './pages/Login';
+import Chart from './pages/Chart';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'; 
 
@@ -16,8 +17,9 @@ function App() {
         <Route path="/" element={<Login />}/>
 
         <Route path="/dashboard" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Home />} /> 
           <Route path="*" element={<NoPage />} />
+          <Route path="chart" element={<Chart />} />
         </Route>
       </Routes>
     </BrowserRouter>
