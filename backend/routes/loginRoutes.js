@@ -1,14 +1,11 @@
 
-const express = require("express");
+import express from"express";
+import { login } from "../controllers/loginControllers.js";
+
 const router = express.Router();
-import { login } from "../controllers/loginController.js";
 
-// Home page route.
-router.get("/", login);
+// Login controller route.
+router.post("/", login);
 
-// About page route.
-router.get("/about", function (req, res) {
-  res.send("About this wiki");
-});
 
-module.exports = router;
+export default router;

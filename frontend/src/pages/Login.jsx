@@ -8,15 +8,10 @@ const Login = () => {
 
         <h1>Login</h1>
         
-        <p>email</p>
-        <input type="text" placeholder="email" />
-        <p>password</p>
-        <input type="text" placeholder="password" />
 
-        <p></p>
-        
-        <button>Login</button>
-
+        <a href="http://localhost:3000/auth/google">
+          <button>Login with Google</button>
+        </a>
       </div>
     </>
   )

@@ -1,6 +1,6 @@
 
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
     // Logic for handling login
     const { email, password } = req.body;
 

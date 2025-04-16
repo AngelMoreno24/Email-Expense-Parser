@@ -3,31 +3,31 @@ import './cssPages/Home.css'; // Optional if you want separate styling
 import ConnectGmailButton from '../components/ConnectGmailButton'; // Adjust the path as necessary
 const Home = () => {
   
-  const [isConnected, setIsConnected] = useState(false);
-
+  const [expenses, setExpenses] = useState([]);
+  
   useEffect(() => {
-    // Call your backend to check if the user's Gmail is connected
-    fetch('http://localhost:5173/api/user/status', {
-      credentials: 'include',
+    fetch('http://localhost:3000/api/expenses', {
+      credentials: 'include' // ✅ Send cookies/session
     })
-      .then(res => res.json())
-      .then(data => setIsConnected(data.gmailConnected));
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch expenses");
+        return res.json();
+      })
+      .then(setExpenses)
+      .catch(err => {
+        console.error("Error fetching expenses:", err);
+      });
   }, []);
+
   return (
-    <div className="home-container">
-      <h1 className="home-title">Welcome Home</h1>
-      <p className="home-subtext">This is your homepage. Here’s some sample content to get started:</p>
-      
-      <ul className="home-list">
-        <li>🏡 Home</li>
-        <li>📄 Home</li>
-        <li>📌 Home</li>
-        <li>📍 Home</li>
-        <li>📘 Home</li>
-      </ul>
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <ConnectGmailButton isConnected={isConnected} />
-    </div>
+    <div>
+      <h2>Your Expenses</h2>
+      {expenses.map((e, i) => (
+        <div key={i}>
+          <p>{e.snippet}</p>
+          <strong>Amount: ₹{e.amount}</strong>
+        </div>
+      ))}
     </div>
   )
 }
