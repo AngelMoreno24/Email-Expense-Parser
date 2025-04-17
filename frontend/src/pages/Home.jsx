@@ -6,16 +6,18 @@ const Home = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [food, setFood] = useState([]);
-  const [transportation, setTransportation] = useState([]);
-  const [shopping, setShopping] = useState([]);
-  const [bills, setBills] = useState([]);
-  const [travel, setTravel] = useState([]);
-  const [healthcare, setHealthcare] = useState([]);
-  const [entertainment, setEntertainment] = useState([]);
-  const [education, setEducation] = useState([]);
-  const [gifts, setGifts] = useState([]);
-  const [misc, setMisc] = useState([]);
+  const [categorizedExpenses, setCategorizedExpenses] = useState({
+    food: [],
+    transportation: [],
+    shopping: [],
+    bills: [],
+    travel: [],
+    healthcare: [],
+    entertainment: [],
+    education: [],
+    gifts: [],
+    misc: []
+  });
 
   const fetchExpenses = () => {
     setLoading(true);
@@ -43,60 +45,33 @@ const Home = () => {
   useEffect(() => {
     categorizeExpenses();
   }, [expenses]);
+
   const categorizeExpenses = () => {
-    expenses.map(e => {
+    const categories = {
+      food: [],
+      transportation: [],
+      shopping: [],
+      bills: [],
+      travel: [],
+      healthcare: [],
+      entertainment: [],
+      education: [],
+      gifts: [],
+      misc: []
+    };
 
-      if (e.category == "food") {
-        setFood(prev => [...prev, e]);
+    expenses.forEach(e => {
+      const category = e.category?.toLowerCase();
+      if (category && categories.hasOwnProperty(category)) {
+        categories[category].push(e);
+      } else {
+        categories.misc.push(e);
       }
-
-      if (e.category == "transportation") {
-        setTransportation(prev => [...prev, e]);
-      }
-
-      if (e.category == "shopping") {
-        setShopping(prev => [...prev, e]);
-      }
-
-      if (e.category == "bills") {
-        setBills(prev => [...prev, e]);
-      }
-
-      if (e.category == "travel") {
-        setTravel(prev => [...prev, e]);
-      }
-
-      if (e.category == "healthcare") {
-        setHealthcare(prev => [...prev, e]);
-      }
-      if (e.category == "entertainment") {
-        setEntertainment(prev => [...prev, e]);
-      }
-
-      if (e.category == "education") {
-        setEducation(prev => [...prev, e.category]);
-      }
-
-      if (e.category == "gifts") {
-        setGifts(prev => [...prev, e.category]);
-      }
-
-      if (e.category == "misc") {
-        setMisc(prev => [...prev, e.category]);
-      }
-
-      // food: ['zomato'
-      //transportation:
-      //shopping: ['ama
-      //bills: ['electr
-      //travel: ['hotel
-      //healthcare: ['h
-      //entertainment: 
-      //education: ['co
-      //gifts: ['gift',
-      //misc: ['miscell
     });
-  }
+
+    setCategorizedExpenses(categories);
+  };
+
   return (
     <div>
       <h2>Your Expenses</h2>
@@ -106,16 +81,23 @@ const Home = () => {
 
       {loading ? (
         <p>Loading...</p>
-      ) : shopping.length > 0 ? (
-        shopping.map((e, i) => (
-          <div key={i}>
-            <p>{e.snippet}</p>
-            <strong>Amount: ${e.amount}</strong>
-            <p>Category: {e.category}</p>
+      ) : (
+        Object.entries(categorizedExpenses).map(([category, items]) => (
+          <div key={category}>
+            <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+            {items.length === 0 ? (
+              <p>No {category} expenses</p>
+            ) : (
+              items.map((e, i) => (
+                <div key={i}>
+                  <p>{e.snippet}</p>
+                  <strong>Amount: ₹{e.amount}</strong>
+                  <p>Category: {e.category}</p>
+                </div>
+              ))
+            )}
           </div>
         ))
-      ) : (
-        <p>No expenses found.</p>
       )}
     </div>
   );
