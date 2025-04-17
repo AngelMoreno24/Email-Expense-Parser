@@ -1,12 +1,10 @@
-// src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Import navigate
 import './cssPages/Home.css';
+import ConnectGmailButton from '../components/ConnectGmailButton';
 
 const Home = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // ⬅️ Init navigate
 
   const fetchExpenses = () => {
     setLoading(true);
@@ -14,15 +12,11 @@ const Home = () => {
       credentials: 'include'
     })
       .then(res => {
-        if (res.status === 401) {
-          navigate('/'); // ⬅️ Redirect to login page
-          return;
-        }
         if (!res.ok) throw new Error("Failed to fetch expenses");
         return res.json();
       })
       .then(data => {
-        if (data) setExpenses(data);
+        setExpenses(data);
         setLoading(false);
       })
       .catch(err => {
@@ -48,7 +42,8 @@ const Home = () => {
         expenses.map((e, i) => (
           <div key={i}>
             <p>{e.snippet}</p>
-            <strong>Amount: ₹{e.amount}</strong>
+            <strong>Amount: ${e.amount}</strong>
+            <p>Category: {e.category}</p>
           </div>
         ))
       ) : (
