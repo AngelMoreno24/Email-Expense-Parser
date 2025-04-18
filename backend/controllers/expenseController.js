@@ -67,21 +67,25 @@ export const getExpenses = async (req, res) => {
   const result = await gmail.users.messages.list({
     userId: 'me',
     q: 'receipt OR transaction OR payment',
-    maxResults: 50
+    maxResults: 100
   });
 
   const summaries = [];
   for (let m of result.data.messages) {
     const msg = await gmail.users.messages.get({ userId: 'me', id: m.id });
     const snippet = msg.data.snippet;
-
+  
     // Step 1: Check if the email is related to expenses and not promotional
     if (isExpenseEmail(snippet)) {
       const amount = extractAmount(snippet);
       const category = categorizeExpense(snippet);
-
+  
+      // Extract the internal date (in ms since epoch)
+      const dateMs = parseInt(msg.data.internalDate);
+      const date = new Date(dateMs).toISOString(); // Or format with toLocaleDateString()
+  
       if (amount) {
-        summaries.push({ snippet, amount, category });
+        summaries.push({ amount, category, date });
       }
     }
   }

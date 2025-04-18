@@ -34,6 +34,7 @@ const Home = () => {
       })
       .then(data => {
         setExpenses(data);
+        console.log("Fetched expenses:", data);
         setLoading(false);
       })
       .catch(err => {
@@ -109,6 +110,21 @@ const Home = () => {
         <p>Loading...</p>
       ) : (
         <div>
+          {Object.entries(categorizedExpenses).map(([category, items]) => (
+          <div key={category}>
+            <h3>{category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+            {items.length === 0 ? (
+              <p>No {category} expenses</p>
+            ) : (
+              items.map((e, i) => (
+                <div key={i}>
+                  <strong>Amount: ${e.amount}</strong>
+                  <p>date: {e.date}</p>
+                </div>
+              ))
+            )}
+          </div>
+        ))}
           {!loading && data.length > 0 && (
             <div className="pie-chart-container">
               <h3 className="pie-chart-title">Expense Distribution</h3>
